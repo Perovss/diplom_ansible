@@ -1,5 +1,13 @@
 terraform {
   required_version = ">= 0.12.0"
+  backend "remote" {
+    hostname = "app.terraform.io"
+    organization = "ivanadminekb"
+
+    workspaces {
+      prefix = "netology-diploma-"
+    }
+  }
 }
 
 provider "aws" {
@@ -38,11 +46,11 @@ module "aws-elb" {
   default_tags          = var.default_tags
 }
 
-module "aws-iam" {
-  source = "./modules/iam"
+# module "aws-iam" {
+#   source = "./modules/iam"
 
-  aws_cluster_name = var.aws_cluster_name
-}
+#   aws_cluster_name = var.aws_cluster_name
+# }
 
 /*
 * Create Bastion Instances in AWS
@@ -88,7 +96,7 @@ resource "aws_instance" "k8s-master" {
     volume_size = var.aws_kube_master_disk_size
   }
 
-  iam_instance_profile = module.aws-iam.kube_control_plane-profile
+  # iam_instance_profile = module.aws-iam.kube_control_plane-profile
   key_name             = var.AWS_SSH_KEY_NAME
 
   tags = merge(var.default_tags, tomap({
@@ -143,7 +151,7 @@ resource "aws_instance" "k8s-worker" {
     volume_size = var.aws_kube_worker_disk_size
   }
 
-  iam_instance_profile = module.aws-iam.kube-worker-profile
+  # iam_instance_profile = module.aws-iam.kube-worker-profile
   key_name             = var.AWS_SSH_KEY_NAME
 
   tags = merge(var.default_tags, tomap({
@@ -168,7 +176,7 @@ data "template_file" "inventory" {
     list_node                 = join("\n", aws_instance.k8s-worker.*.private_dns)
     connection_strings_etcd   = join("\n", formatlist("%s ansible_host=%s", aws_instance.k8s-etcd.*.private_dns, aws_instance.k8s-etcd.*.private_ip))
     list_etcd                 = join("\n", ((var.aws_etcd_num > 0) ? (aws_instance.k8s-etcd.*.private_dns) : (aws_instance.k8s-master.*.private_dns)))
-    elb_api_fqdn              = "apiserver_loadbalancer_domain_name=\"${module.aws-elb.aws_elb_api_fqdn}\""
+    elb_api_fqdn              = "apiserver_loadbalancer_domain_name=\"${var.k8s_api_subdomain}.${var.project_domain}\""
   }
 }
 

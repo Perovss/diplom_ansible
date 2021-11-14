@@ -5,5 +5,3 @@ required_pkgs:
   - apt-transport-https
   - software-properties-common
   - conntrack
-  - apparmor
-  - libseccomp2

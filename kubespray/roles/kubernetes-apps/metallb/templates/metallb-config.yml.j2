@@ -15,7 +15,7 @@ data:
 {% endfor %}
 {% endif %}
     address-pools:
-    - name: {{ metallb_pool_name }}
+    - name: loadbalanced
       protocol: {{ metallb_protocol }}
       addresses:
 {% for ip_range in metallb_ip_range %}

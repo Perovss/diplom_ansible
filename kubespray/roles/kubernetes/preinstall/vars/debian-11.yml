@@ -6,5 +6,3 @@ required_pkgs:
   - software-properties-common
   - conntrack
   - iptables
-  - apparmor
-  - libseccomp2

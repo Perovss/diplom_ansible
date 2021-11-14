@@ -15,10 +15,10 @@ is_fedora_coreos: false
 disable_swap: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.22.2
+kube_version: v1.21.5
 
 ## The minimum version working
-kube_version_min_required: v1.20.0
+kube_version_min_required: v1.19.0
 
 ## Kube Proxy mode One of ['iptables','ipvs']
 kube_proxy_mode: ipvs
@@ -37,12 +37,6 @@ kubeadm_init_phases_skip: >-
   {%- else -%}
   {{ kubeadm_init_phases_skip_default }}
   {%- endif -%}
-
-# List of kubeadm phases that should be skipped when joining a new node
-# You may need to set this to ['preflight'] for air-gaped deployments to avoid failing connectivity tests.
-kubeadm_join_phases_skip_default: []
-kubeadm_join_phases_skip: >-
- {{ kubeadm_join_phases_skip_default }}
 
 # A string slice of values which specify the addresses to use for NodePorts.
 # Values may be valid IP blocks (e.g. 1.2.3.0/24, 1.2.3.4/32).
@@ -243,9 +237,6 @@ kubelet_shutdown_grace_period: 60s
 # kubelet_shutdown_grace_period_critical_pods should be less than kubelet_shutdown_grace_period
 # to give normal pods time to be gracefully evacuated
 kubelet_shutdown_grace_period_critical_pods: 20s
-
-# Whether to deploy the container engine
-deploy_container_engine: inventory_hostname in groups['k8s_cluster'] or etcd_deployment_type != 'host'
 
 # Container for runtime
 container_manager: docker
@@ -467,7 +458,7 @@ weave_password: EnterPasswordHere
 
 ssl_ca_dirs: |-
   [
-  {% if ansible_os_family in ['Flatcar', 'Flatcar Container Linux by Kinvolk'] -%}
+  {% if ansible_os_family in ['Flatcar Container Linux by Kinvolk'] -%}
   '/usr/share/ca-certificates',
   {% elif ansible_os_family == 'RedHat' -%}
   '/etc/pki/tls',

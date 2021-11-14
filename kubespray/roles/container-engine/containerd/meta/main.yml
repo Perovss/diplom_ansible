@@ -1,5 +1,3 @@
 ---
 dependencies:
   - role: container-engine/containerd-common
-  - role: container-engine/runc
-  - role: container-engine/crictl
