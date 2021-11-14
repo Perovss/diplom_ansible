@@ -100,6 +100,7 @@ The following tags are defined in playbooks:
 
 |                       Tag name | Used for
 |--------------------------------|---------
+|                     ambassador | Ambassador Ingress Controller
 |                       annotate | Create kube-router annotation
 |                           apps | K8s apps definitions
 |                        asserts | Check tasks for download role
@@ -251,7 +252,7 @@ For more information about Ansible and bastion hosts, read
 
 ## Mitogen
 
-Mitogen support is deprecated, please see [mitogen related docs](/docs/mitogen.md) for useage and reasons for deprecation.
+You can use [mitogen](/docs/mitogen.md) to speed up kubespray.
 
 ## Beyond ansible 2.9
 

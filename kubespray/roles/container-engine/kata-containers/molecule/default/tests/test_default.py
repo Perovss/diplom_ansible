@@ -14,24 +14,17 @@ def test_run(host):
     assert "kata-runtime" in cmd.stdout
 
 
-def test_run_check(host):
-    kataruntime = "/opt/kata/bin/kata-runtime"
-    with host.sudo():
-        cmd = host.command(kataruntime + " check")
-    assert cmd.rc == 0
-    assert "System is capable of running" in cmd.stdout
-
-
 def test_run_pod(host):
-    runtime = "kata-qemu"
+    image = "docker.io/library/hello-world:latest"
+    runtime = "io.containerd.kata-qemu.v2"
 
-    run_command = "/usr/local/bin/crictl run --with-pull --runtime {} /tmp/container.json /tmp/sandbox.json".format(runtime)
+    pull_command = "ctr image pull {}".format(image)
+    with host.sudo():
+        cmd = host.command(pull_command)
+    assert cmd.rc == 0
+
+    run_command = "ctr run --runtime {} {} kata1".format(runtime, image)
     with host.sudo():
         cmd = host.command(run_command)
     assert cmd.rc == 0
-
-    with host.sudo():
-      log_f = host.file("/tmp/kata1.0.log")
-
-      assert log_f.exists
-      assert b"Hello from Docker!" in log_f.content
+    assert "Hello from Docker!" in cmd.stdout
