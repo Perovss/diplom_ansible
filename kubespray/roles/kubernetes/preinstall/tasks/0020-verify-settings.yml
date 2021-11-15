@@ -56,16 +56,6 @@
     - kube_network_plugin == 'calico'
     - not ignore_assert_errors
 
-- name: Stop if kube-proxy is enabled when using eBPF dataplane
-  assert:
-    that:
-      - kube_proxy_remove
-    msg: "kube-proxy needs to be disabled when using Calico with eBPF dataplane"
-  when:
-    - calico_bpf_enabled | default(false)
-    - kube_network_plugin == 'calico'
-    - not ignore_assert_errors
-
 - name: Stop if unsupported version of Kubernetes
   assert:
     that: kube_version is version(kube_version_min_required, '>=')
@@ -183,8 +173,8 @@
 
 - name: check cloud_provider value
   assert:
-    that: cloud_provider in ['generic', 'gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci', 'external']
-    msg: "If set the 'cloud_provider' var must be set either to 'generic', 'gce', 'aws', 'azure', 'openstack', 'vsphere', or external"
+    that: cloud_provider in ['gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci', 'external']
+    msg: "If set the 'cloud_provider' var must be set either to 'gce', 'aws', 'azure', 'openstack', 'vsphere', 'oci' or 'external'"
   when:
     - cloud_provider is defined
     - not ignore_assert_errors
