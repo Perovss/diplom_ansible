@@ -11,9 +11,7 @@ temp
 *.tfstate.backup
 .terraform/
 contrib/terraform/aws/credentials.tfvars
-contrib/terraform/aws/credentials.auto.tfvars
-/key/*
-!/ssh-bastion.conf
+/ssh-bastion.conf
 **/*.sw[pon]
 *~
 vagrant/
@@ -21,10 +19,9 @@ plugins/mitogen
 
 # Ansible inventory
 inventory/*
-!inventory/hosts
-!inventory/group_vars
 !inventory/local
 !inventory/sample
+!inventory/diplom
 inventory/*/artifacts/
 
 # Byte-compiled / optimized / DLL files
@@ -103,3 +100,7 @@ target/
 # virtualenv
 venv/
 ENV/
+
+# molecule
+roles/**/molecule/**/__pycache__/
+roles/**/molecule/**/*.conf

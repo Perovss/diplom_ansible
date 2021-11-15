@@ -16,12 +16,8 @@ kube_token_dir: "{{ kube_config_dir }}/tokens"
 
 kube_api_anonymous_auth: true
 
-# Minimal memory requirement in MB for safety checks
-minimal_node_memory_mb: 970
-minimal_master_memory_mb: 970
-
 ## Change this to use another Kubernetes version, e.g. a current beta release
-kube_version: v1.21.5
+kube_version: v1.22.3
 
 # Where the binaries will be downloaded.
 # Note: ensure that you've enough disk space (about 1G)
@@ -68,7 +64,7 @@ credentials_dir: "{{ inventory_dir }}/credentials"
 
 # Choose network plugin (cilium, calico, weave or flannel. Use cni for generic cni plugin)
 # Can also be set to 'cloud', which lets the cloud provider setup appropriate routing
-kube_network_plugin: flannel
+kube_network_plugin: calico
 
 # Setting multi_networking to true will install Multus: https://github.com/intel/multus-cni
 kube_network_plugin_multus: false
@@ -154,12 +150,14 @@ kube_proxy_nodeport_addresses: >-
 kube_encrypt_secret_data: false
 
 # Graceful Node Shutdown (Kubernetes >= 1.21.0), see https://kubernetes.io/blog/2021/04/21/graceful-node-shutdown-beta/
+# kubelet_shutdown_grace_period had to be greater than kubelet_shutdown_grace_period_critical_pods to allow
+# non-critical podsa to also terminate gracefully
 # kubelet_shutdown_grace_period: 60s
 # kubelet_shutdown_grace_period_critical_pods: 20s
 
 # DNS configuration.
 # Kubernetes cluster name, also will be used as DNS domain
-cluster_name: k8s-diploma.local
+cluster_name: cluster.local
 # Subdomains of DNS domain to be resolved via /etc/resolv.conf for hostnet pods
 ndots: 2
 # Can be coredns, coredns_dual, manual or none
@@ -168,9 +166,12 @@ dns_mode: coredns
 # manual_dns_server: 10.x.x.x
 # Enable nodelocal dns cache
 enable_nodelocaldns: true
+enable_nodelocaldns_secondary: false
 nodelocaldns_ip: 169.254.25.10
 nodelocaldns_health_port: 9254
+nodelocaldns_second_health_port: 9256
 nodelocaldns_bind_metrics_host_ip: false
+nodelocaldns_secondary_skew_seconds: 5
 # nodelocaldns_external_zones:
 # - zones:
 #   - example.com

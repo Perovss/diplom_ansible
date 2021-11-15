@@ -20,20 +20,12 @@ variable "aws_cluster_name" {
   description = "Name of AWS Cluster"
 }
 
-variable "project_domain" {
-  description = "Domain for call projects in AWS Cluster"
-}
-
-variable "k8s_api_subdomain" {
-  description = "Subdomain for call Cluster API"
-}
-
 data "aws_ami" "distro" {
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-focal-20.04-amd64-server-*"]
+    values = ["debian-10-amd64-*"]
   }
 
   filter {
@@ -41,7 +33,7 @@ data "aws_ami" "distro" {
     values = ["hvm"]
   }
 
-  owners = ["099720109477"] # Canonical
+  owners = ["136693071363"] # Debian-10
 }
 
 //AWS VPC Variables
