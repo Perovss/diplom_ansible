@@ -17,8 +17,8 @@ kube_token_dir: "{{ kube_config_dir }}/tokens"
 kube_api_anonymous_auth: true
 
 ## Change this to use another Kubernetes version, e.g. a current beta release
-minimal_node_memory_mb: 970
-minimal_master_memory_mb: 970
+#minimal_node_memory_mb: 970
+#minimal_master_memory_mb: 970
 
 kube_version: v1.22.3
 
